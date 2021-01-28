@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.list.MovieListFragment">
+    android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvMovies"
-        android:layout_height="match_parent"
+    <com.liaoinstan.springview.widget.SpringView
+        android:id="@+id/svContainer"
         android:layout_width="match_parent"
-        tools:listitem="@layout/item_movie"
-        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-        android:overScrollMode="never"
-        />
+        android:layout_height="match_parent"
+        app:type="follow"
+        app:footer="@layout/view_header_footer"
+        app:header="@layout/view_header_footer"
+        >
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMovies"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+            tools:listitem="@layout/item_movie" />
+    </com.liaoinstan.springview.widget.SpringView>
 </androidx.constraintlayout.widget.ConstraintLayout>

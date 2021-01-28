@@ -1,11 +1,12 @@
 package my.farhan.movie.ui.list
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.liaoinstan.springview.widget.SpringView
 import my.farhan.movie.R
 
 class MovieListFragment : Fragment() {
@@ -15,12 +16,15 @@ class MovieListFragment : Fragment() {
     }
 
     private lateinit var viewModel: MovieListVM
+    private lateinit var svContainer: SpringView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_movie_list, container, false)
+        val root = inflater.inflate(R.layout.fragment_movie_list, container, false)
+        svContainer = root.findViewById(R.id.svContainer)
+        return root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
