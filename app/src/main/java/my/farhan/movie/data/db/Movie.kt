@@ -12,6 +12,7 @@ data class Movie(
     val title: String,
     val popularity: Double,
     //detail
+    var hasCalledDetailApi: Boolean = false,
     var genre: List<String>? = emptyList(),
     var overview: String? = "",
     var voteAverage: Double? = 0.0,

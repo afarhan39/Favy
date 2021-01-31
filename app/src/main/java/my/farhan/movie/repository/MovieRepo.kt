@@ -43,6 +43,7 @@ class MovieRepo(private val api: MovieEndpoint, private val dao: MovieDao) {
             )
             if (response.isSuccessful) {
                 val movie = dao.findMovie(movieId)
+                movie.hasCalledDetailApi = true
                 movie.genre = response.body()?.genres?.map { it.name }
                 movie.overview = response.body()?.overview
                 movie.voteAverage = response.body()?.voteAverage

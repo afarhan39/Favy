@@ -22,10 +22,11 @@ class MovieListVM(private val movieRepo: MovieRepo) : ViewModel() {
 
     fun getMovieDetails(movieId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            if (movieRepo.getMovieDetailsDB(movieId).genre.isNullOrEmpty())
-                movieRepo.getMovieDetailsAPI(movieId)
+            val movie = movieRepo.getMovieDetailsDB(movieId)
+            if (movie.hasCalledDetailApi)
+                movieRepo.selectedMovie.postValue(movie)
             else
-                movieRepo.selectedMovie.postValue(movieRepo.getMovieDetailsDB(movieId))
+                movieRepo.getMovieDetailsAPI(movieId)
         }
     }
 }
