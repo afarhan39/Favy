@@ -22,12 +22,13 @@ class MovieRepo(private val api: MovieEndpoint, private val dao: MovieDao) {
             if (response.isSuccessful) {
                 val list = ArrayList<Movie>()
                 for (item in response.body()!!.results) {
-                    val bgImg = when {
-                        item.backdropPath != null -> "https://image.tmdb.org/t/p/w300/${item.backdropPath}"
-                        item.posterPath != null -> "https://image.tmdb.org/t/p/w342/${item.posterPath}"
-                        else -> ""
-                    }
-                    list.add(Movie(item.id, bgImg, item.title, item.popularity))
+                    val backDropUrl =
+                        if (item.backdropPath != null) "https://image.tmdb.org/t/p/w780/${item.backdropPath}"
+                        else ""
+                    val posterUrl =
+                        if (item.posterPath != null) "https://image.tmdb.org/t/p/w342/${item.posterPath}"
+                        else ""
+                    list.add(Movie(item.id, backDropUrl, posterUrl, item.title, item.popularity))
                 }
                 dao.addList(list)
             }

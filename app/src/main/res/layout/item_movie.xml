@@ -15,7 +15,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="350dp"
         android:onClick="@{() -> listener.onClick(movie)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,9 +25,9 @@
             <ImageView
                 android:id="@+id/ivBackdrop"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="300dp"
                 android:scaleType="centerCrop"
-                imageUrl="@{movie.backDropImg}"
+                imageUrl="@{movie.posterUrl}"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textview.MaterialTextView

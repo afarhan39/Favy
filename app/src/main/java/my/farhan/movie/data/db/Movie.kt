@@ -8,7 +8,8 @@ data class Movie(
     //list
     @PrimaryKey
     val movieId: Int,
-    val backDropImg: String,
+    val backDropUrl: String,
+    val posterUrl: String,
     val title: String,
     val popularity: Double,
     //detail
