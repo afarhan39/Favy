@@ -25,7 +25,7 @@ class MovieRepo(private val api: MovieEndpoint, private val dao: MovieDao) {
                     val bgImg = when {
                         item.backdropPath != null -> "https://image.tmdb.org/t/p/w300/${item.backdropPath}"
                         item.posterPath != null -> "https://image.tmdb.org/t/p/w342/${item.posterPath}"
-                        else -> "https://smithssanitationsupply.ca/wp-content/uploads/2018/06/noimage-1.png"
+                        else -> ""
                     }
                     list.add(Movie(item.id, bgImg, item.title, item.popularity))
                 }

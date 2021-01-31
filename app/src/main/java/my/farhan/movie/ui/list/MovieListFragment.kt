@@ -16,11 +16,12 @@ import com.liaoinstan.springview.widget.SpringView
 import my.farhan.movie.R
 import my.farhan.movie.data.db.Movie
 import my.farhan.movie.databinding.FragmentMovieListBinding
+import my.farhan.movie.util.SpacesItemDecoration
 import my.farhan.movie.util.TAG
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MovieListFragment : Fragment(), MoviesAdapter.Listener {
-    private val movieVM by viewModel<MovieListVM>()
+    private val movieListVM by viewModel<MovieListVM>()
     private lateinit var bv: FragmentMovieListBinding
     private lateinit var moviesAdapter: MoviesAdapter
 
@@ -35,23 +36,31 @@ class MovieListFragment : Fragment(), MoviesAdapter.Listener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        bv.vm = movieVM
+        bv.vm = movieListVM
 
         bv.svContainer.setListener(object : SpringView.OnFreshListener {
             override fun onRefresh() {
-                bv.vm!!.onLoadMovie()
-                Handler(Looper.getMainLooper()).postDelayed({ bv.svContainer.onFinishFreshAndLoad() }, 1000)
+                movieListVM.onLoadMovie()
+                Handler(Looper.getMainLooper()).postDelayed(
+                    { bv.svContainer.onFinishFreshAndLoad() },
+                    1000
+                )
             }
 
             override fun onLoadmore() {
-                Handler(Looper.getMainLooper()).postDelayed({ bv.svContainer.onFinishFreshAndLoad() }, 1000)
+                Handler(Looper.getMainLooper()).postDelayed(
+                    { bv.svContainer.onFinishFreshAndLoad() },
+                    1000
+                )
             }
         })
 
         moviesAdapter = MoviesAdapter(requireContext(), this)
         bv.rvMovies.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
         bv.rvMovies.adapter = moviesAdapter
-        movieVM.movieList.observe(viewLifecycleOwner, {
+        val decoration = SpacesItemDecoration(16)
+        bv.rvMovies.addItemDecoration(decoration)
+        movieListVM.movieList.observe(viewLifecycleOwner, {
             if (it.isNotEmpty() && it != null) {
                 moviesAdapter.setMovies(it)
             }
@@ -60,7 +69,7 @@ class MovieListFragment : Fragment(), MoviesAdapter.Listener {
 
     override fun onClick(movie: Movie) {
         Log.d(TAG, movie.title)
-        movieVM.selectMovie(movie)
+        movieListVM.selectMovie(movie)
         findNavController().navigate(R.id.actListToDetail)
     }
 }
