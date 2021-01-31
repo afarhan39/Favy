@@ -40,7 +40,7 @@ class MovieListFragment : Fragment(), MoviesAdapter.Listener {
 
         bv.svContainer.setListener(object : SpringView.OnFreshListener {
             override fun onRefresh() {
-                movieListVM.onLoadMovie()
+                movieListVM.onLoadMovies()
                 Handler(Looper.getMainLooper()).postDelayed(
                     { bv.svContainer.onFinishFreshAndLoad() },
                     1000
@@ -69,7 +69,9 @@ class MovieListFragment : Fragment(), MoviesAdapter.Listener {
 
     override fun onClick(movie: Movie) {
         Log.d(TAG, movie.title)
-        movieListVM.selectMovie(movie)
-        findNavController().navigate(R.id.actListToDetail)
+        movieListVM.getMovieDetails(movie.movieId)
+        movieListVM.selectedMovie.observe(viewLifecycleOwner, {
+            findNavController().navigate(R.id.actListToDetail)
+        })
     }
 }

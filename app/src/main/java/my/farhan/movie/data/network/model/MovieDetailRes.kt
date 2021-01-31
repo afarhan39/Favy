@@ -9,25 +9,25 @@ data class MovieDetailRes(
     @Json(name = "adult")
     val adult: Boolean,
     @Json(name = "backdrop_path")
-    val backdropPath: String,
+    val backdropPath: String?,
     @Json(name = "belongs_to_collection")
-    val belongsToCollection: BelongsToCollection,
+    val belongsToCollection: BelongsToCollection?,
     @Json(name = "budget")
     val budget: Int,
     @Json(name = "genres")
     val genres: List<Genre>,
     @Json(name = "homepage")
-    val homepage: String,
+    val homepage: String?,
     @Json(name = "id")
     val id: Int,
     @Json(name = "imdb_id")
-    val imdbId: String,
+    val imdbId: String?,
     @Json(name = "original_language")
     val originalLanguage: String,
     @Json(name = "original_title")
     val originalTitle: String,
     @Json(name = "overview")
-    val overview: String,
+    val overview: String?,
     @Json(name = "popularity")
     val popularity: Double,
     @Json(name = "poster_path")
@@ -41,13 +41,13 @@ data class MovieDetailRes(
     @Json(name = "revenue")
     val revenue: Int,
     @Json(name = "runtime")
-    val runtime: Int,
+    val runtime: Int?,
     @Json(name = "spoken_languages")
     val spokenLanguages: List<SpokenLanguage>,
     @Json(name = "status")
     val status: String,
     @Json(name = "tagline")
-    val tagline: String,
+    val tagline: String?,
     @Json(name = "title")
     val title: String,
     @Json(name = "video")
@@ -66,7 +66,7 @@ data class MovieDetailRes(
         @Json(name = "name")
         val name: String,
         @Json(name = "poster_path")
-        val posterPath: String
+        val posterPath: String?
     )
 
     @JsonClass(generateAdapter = true)
@@ -82,7 +82,7 @@ data class MovieDetailRes(
         @Json(name = "id")
         val id: Int,
         @Json(name = "logo_path")
-        val logoPath: String,
+        val logoPath: String?,
         @Json(name = "name")
         val name: String,
         @Json(name = "origin_country")
@@ -104,6 +104,6 @@ data class MovieDetailRes(
         @Json(name = "iso_639_1")
         val iso6391: String,
         @Json(name = "name")
-        val name: String
+        val name: String?
     )
 }

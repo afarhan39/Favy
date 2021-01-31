@@ -20,6 +20,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.google.android.material.textview.MaterialTextView
 import my.farhan.movie.R
 
 object BindingAdapters {
@@ -42,5 +43,14 @@ object BindingAdapters {
             Glide.with(view.context).load(url).into(view)
         else
             view.setImageResource(R.drawable.ic_no_image)
+    }
+
+    @BindingAdapter("movieDuration")
+    @JvmStatic
+    fun movieDuration(view: MaterialTextView, runTime: Int) {
+        if (runTime == 0)
+            view.text = view.context.getString(R.string.unavailable)
+        else
+            view.text = view.context.getString(R.string.duration, runTime)
     }
 }

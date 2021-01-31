@@ -1,8 +1,6 @@
 package my.farhan.movie.ui.list
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -13,22 +11,21 @@ import my.farhan.movie.util.TAG
 
 class MovieListVM(private val movieRepo: MovieRepo) : ViewModel() {
     val movieList = movieRepo.moviesLD
-    val selectedMovie = MutableLiveData<Movie>()
+    val selectedMovie = movieRepo.selectedMovie
 
-    fun onLoadMovie() {
+    fun onLoadMovies() {
         viewModelScope.launch(Dispatchers.IO) {
-            movieRepo.discoverMovies()
+            movieRepo.discoverMoviesAPI()
             Log.d(TAG, "aaaa")
         }
     }
 
-    fun addMovieDetail() {
-        viewModelScope.launch {
-            movieRepo.getMovieDetails()
+    fun getMovieDetails(movieId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (movieRepo.getMovieDetailsDB(movieId).genre.isNullOrEmpty())
+                movieRepo.getMovieDetailsAPI(movieId)
+            else
+                movieRepo.selectedMovie.postValue(movieRepo.getMovieDetailsDB(movieId))
         }
-    }
-
-    fun selectMovie(movie: Movie) {
-        movieRepo.selectedMovie.postValue(movie)
     }
 }

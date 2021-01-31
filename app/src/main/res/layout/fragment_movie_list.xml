@@ -35,7 +35,7 @@
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> vm.onLoadMovie()}"
+            android:onClick="@{() -> vm.onLoadMovies()}"
             android:text="@string/retry"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

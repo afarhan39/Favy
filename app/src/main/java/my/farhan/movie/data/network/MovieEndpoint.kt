@@ -12,7 +12,7 @@ interface MovieEndpoint {
     @GET("discover/movie")
     suspend fun getDiscoverMovie(
         @Query("api_key") apiKey: String,
-        @Query("primary_release_date.gte") releaseDateGTE: String,
+        @Query("primary_release_date.lte") releaseDateLTE: String,
         @Query("sort_by") sortBy: String,
         @Query("page") page: String
     )

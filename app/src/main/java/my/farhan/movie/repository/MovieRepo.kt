@@ -11,7 +11,7 @@ class MovieRepo(private val api: MovieEndpoint, private val dao: MovieDao) {
     val moviesLD = dao.findAllLD()
     val selectedMovie = MutableLiveData<Movie>()
 
-    suspend fun discoverMovies() {
+    suspend fun discoverMoviesAPI() {
         try {
             val response = api.getDiscoverMovie(
                 "328c283cd27bd1877d9080ccb1604c91",
@@ -29,18 +29,34 @@ class MovieRepo(private val api: MovieEndpoint, private val dao: MovieDao) {
                     }
                     list.add(Movie(item.id, bgImg, item.title, item.popularity))
                 }
-                dao.add(list)
+                dao.addList(list)
             }
         } catch (e: Exception) {
-            Log.d(TAG, e.toString())
+            Log.e(TAG, e.toString())
         }
     }
 
-    suspend fun getMovieDetails() {
+    suspend fun getMovieDetailsAPI(movieId: Int) {
         try {
-
+            val response = api.getMovie(
+                movieId.toString(), "328c283cd27bd1877d9080ccb1604c91"
+            )
+            if (response.isSuccessful) {
+                val movie = dao.findMovie(movieId)
+                movie.genre = response.body()?.genres?.map { it.name }
+                movie.overview = response.body()?.overview
+                movie.voteAverage = response.body()?.voteAverage
+                movie.voteCount = response.body()?.voteCount
+                movie.runTime = response.body()?.runtime
+                selectedMovie.postValue(movie)
+                dao.add(movie)
+            }
         } catch (e: Exception) {
-            Log.d(TAG, e.toString())
+            Log.e(TAG, e.toString())
         }
+    }
+
+    suspend fun getMovieDetailsDB(movieId: Int): Movie {
+        return dao.findMovie(movieId)
     }
 }

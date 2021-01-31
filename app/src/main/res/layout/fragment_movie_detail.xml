@@ -44,14 +44,15 @@
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/mtvTitle"
-                tools:text="Duration" />
+                tools:text="Duration"
+                app:movieDuration="@{vm.selectedMovie.runTime}"
+                />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/mtvDash"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:text="-"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
                 app:layout_constraintStart_toEndOf="@id/mtvDuration"
                 app:layout_constraintTop_toBottomOf="@id/mtvTitle" />
@@ -104,7 +105,8 @@
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/mbBookNow"
-                tools:text="Some Long Text" />
+                tools:text="Some Long Text"
+                android:text="@{vm.selectedMovie.overview}"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
