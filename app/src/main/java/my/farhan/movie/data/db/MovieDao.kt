@@ -14,6 +14,9 @@ interface MovieDao {
     @Query("SELECT * FROM Movie")
     fun findAllLD(): LiveData<List<Movie>>
 
+    @Query("SELECT * FROM Movie WHERE movieId = :id")
+    fun findMovieLD(id: Int): LiveData<Movie>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun add(users: List<Movie>)
 }

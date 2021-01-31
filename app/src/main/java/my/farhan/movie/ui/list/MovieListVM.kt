@@ -1,4 +1,4 @@
-package my.farhan.movie.ui
+package my.farhan.movie.ui.list
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -11,8 +11,9 @@ import my.farhan.movie.data.db.Movie
 import my.farhan.movie.repository.MovieRepo
 import my.farhan.movie.util.TAG
 
-class MovieVM(private val movieRepo: MovieRepo) : ViewModel() {
+class MovieListVM(private val movieRepo: MovieRepo) : ViewModel() {
     val movieList = movieRepo.moviesLD
+    val selectedMovie = MutableLiveData<Movie>()
 
     fun onLoadMovie() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -25,5 +26,9 @@ class MovieVM(private val movieRepo: MovieRepo) : ViewModel() {
         viewModelScope.launch {
             movieRepo.getMovieDetails()
         }
+    }
+
+    fun selectMovie(movie: Movie) {
+        movieRepo.selectedMovie.postValue(movie)
     }
 }

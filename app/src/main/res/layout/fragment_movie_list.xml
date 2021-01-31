@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="my.farhan.movie.ui.MovieVM" />
+            type="my.farhan.movie.ui.list.MovieListVM" />
     </data>
 
 
@@ -29,7 +29,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:overScrollMode="never"
-                app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
                 tools:listitem="@layout/item_movie" />
         </com.liaoinstan.springview.widget.SpringView>
 

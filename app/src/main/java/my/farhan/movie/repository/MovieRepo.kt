@@ -1,6 +1,7 @@
 package my.farhan.movie.repository
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import my.farhan.movie.data.db.Movie
 import my.farhan.movie.data.db.MovieDao
 import my.farhan.movie.data.network.MovieEndpoint
@@ -8,6 +9,8 @@ import my.farhan.movie.util.TAG
 
 class MovieRepo(private val api: MovieEndpoint, private val dao: MovieDao) {
     val moviesLD = dao.findAllLD()
+    val selectedMovie = MutableLiveData<Movie>()
+
     suspend fun discoverMovies() {
         try {
             val response = api.getDiscoverMovie(
@@ -19,8 +22,11 @@ class MovieRepo(private val api: MovieEndpoint, private val dao: MovieDao) {
             if (response.isSuccessful) {
                 val list = ArrayList<Movie>()
                 for (item in response.body()!!.results) {
-                    val bgImg = item.backdropPath ?: item.posterPath
-                    ?: "https://smithssanitationsupply.ca/wp-content/uploads/2018/06/noimage-1.png"
+                    val bgImg = when {
+                        item.backdropPath != null -> "https://image.tmdb.org/t/p/w300/${item.backdropPath}"
+                        item.posterPath != null -> "https://image.tmdb.org/t/p/w342/${item.posterPath}"
+                        else -> "https://smithssanitationsupply.ca/wp-content/uploads/2018/06/noimage-1.png"
+                    }
                     list.add(Movie(item.id, bgImg, item.title, item.popularity))
                 }
                 dao.add(list)

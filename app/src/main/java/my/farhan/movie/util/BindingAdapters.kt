@@ -17,7 +17,9 @@
 package my.farhan.movie.util
 
 import android.view.View
+import android.widget.ImageView
 import androidx.databinding.BindingAdapter
+import com.bumptech.glide.Glide
 
 object BindingAdapters {
     @BindingAdapter(value = ["app:hideIfEmpty"])
@@ -30,5 +32,11 @@ object BindingAdapters {
     @JvmStatic
     fun showIfEmpty(view: View, isEmpty: Boolean) {
         view.visibility = if (isEmpty) View.VISIBLE else View.GONE
+    }
+
+    @BindingAdapter("imageUrl")
+    @JvmStatic
+    fun loadImage(view: ImageView, url: String) {
+        Glide.with(view.context).load(url).into(view)
     }
 }
