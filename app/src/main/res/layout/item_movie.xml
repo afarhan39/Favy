@@ -1,56 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="250dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+        <variable
+            name="movie"
+            type="my.farhan.movie.data.db.Movie" />
+
+        <variable
+            name="listener"
+            type="my.farhan.movie.ui.list.MoviesAdapter.Listener" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="250dp">
 
-        <ImageView
-            android:id="@+id/ivBackdrop"
-            app:layout_constraintTop_toTopOf="parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:src="@drawable/img_w300"
-            android:scaleType="centerCrop"/>
+            android:layout_height="match_parent">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/mtvTitle"
-            tools:text="Hello dasd sdsa dsad dsada dsadad dasdas dsadadasd dasd dasda dasdad dasdasda sd"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:maxLines="2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/mtvPopularity"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="10dp"
-            android:gravity="start"
-            android:ellipsize="end"/>
+            <ImageView
+                android:id="@+id/ivBackdrop"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_w300"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/mtvPopularity"
-            android:text="Hello"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:maxLines="2"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="5dp"
-            app:layout_constraintStart_toEndOf="@id/mtvTitle"
-            tools:text="Popularity: 5.40"
-            android:layout_marginBottom="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:ellipsize="end"/>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/mtvTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="10dp"
+                android:ellipsize="end"
+                android:gravity="start"
+                android:maxLines="2"
+                android:text="@{movie.title}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/mtvPopularity"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="Hello dasd sdsa dsad dsada dsadad dasdas dsadadasd dasd dasda dasdad dasdasda sd" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/mtvPopularity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/mtvTitle"
+                tools:text="Popularity: 5.40" />
 
 
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-</com.google.android.material.card.MaterialCardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

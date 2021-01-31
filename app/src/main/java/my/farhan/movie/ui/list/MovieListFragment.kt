@@ -3,46 +3,62 @@ package my.farhan.movie.ui.list
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.liaoinstan.springview.widget.SpringView
 import my.farhan.movie.R
-import my.farhan.movie.ui.detail.MovieDetailVM
+import my.farhan.movie.data.db.Movie
+import my.farhan.movie.databinding.FragmentMovieListBinding
+import my.farhan.movie.ui.MovieVM
+import my.farhan.movie.util.TAG
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class MovieListFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = MovieListFragment()
-    }
-
-    private val movieListVM by viewModel<MovieListVM>()
-    private lateinit var svContainer: SpringView
+class MovieListFragment : Fragment(), MoviesAdapter.Listener {
+    private val movieVM by viewModel<MovieVM>()
+    private lateinit var bv: FragmentMovieListBinding
+    private lateinit var moviesAdapter: MoviesAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val root = inflater.inflate(R.layout.fragment_movie_list, container, false)
-        svContainer = root.findViewById(R.id.svContainer)
-        svContainer.setListener(object : SpringView.OnFreshListener {
+    ): View {
+        bv = DataBindingUtil.inflate(inflater, R.layout.fragment_movie_list, container, false)
+        bv.svContainer.setListener(object : SpringView.OnFreshListener {
             override fun onRefresh() {
-                Handler(Looper.getMainLooper()).postDelayed({ svContainer.onFinishFreshAndLoad() }, 1000)
+                bv.vm!!.onLoadMovie()
+                Handler(Looper.getMainLooper()).postDelayed({ bv.svContainer.onFinishFreshAndLoad() }, 1000)
             }
 
             override fun onLoadmore() {
-                Handler(Looper.getMainLooper()).postDelayed({ svContainer.onFinishFreshAndLoad() }, 1000)
+                Handler(Looper.getMainLooper()).postDelayed({ bv.svContainer.onFinishFreshAndLoad() }, 1000)
             }
         })
-        return root
+
+        moviesAdapter = MoviesAdapter(requireContext(), this)
+        bv.rvMovies.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+        bv.rvMovies.adapter = moviesAdapter
+        movieVM.movieList.observe(viewLifecycleOwner, {
+            if (it.isNotEmpty() && it != null) {
+                moviesAdapter.setMovies(it)
+            }
+        })
+
+        bv.lifecycleOwner = this
+        return bv.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        // TODO: Use the ViewModel
+        bv.vm = movieVM
     }
 
+    override fun onClick(movie: Movie) {
+        Log.d(TAG, movie.title)
+    }
 }
