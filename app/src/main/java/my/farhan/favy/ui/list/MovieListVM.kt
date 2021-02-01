@@ -9,13 +9,12 @@ import my.farhan.favy.data.SortMethod
 import my.farhan.favy.repository.MovieRepo
 
 class MovieListVM(private val movieRepo: MovieRepo) : ViewModel() {
-    val selectedMovie = movieRepo.selectedMovie
     val sortOptionList = SortMethod.values().map { it.label }
     val selectedSortOption = MutableLiveData(SortMethod.ReleaseDate.label)
     private val currentPage = MutableLiveData(1)
     val apiEvent = movieRepo.apiEvent
-
-    val moviesNeo = movieRepo.getAllMovies()
+    val movies = movieRepo.getAllMovies()
+    val selectedMovie = movieRepo.getSelectedMovie()
 
     fun sortBy(sortMethod: SortMethod) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -37,17 +36,13 @@ class MovieListVM(private val movieRepo: MovieRepo) : ViewModel() {
         currentPage.value = nextPage
         viewModelScope.launch(Dispatchers.IO) {
             movieRepo.nowPlayingMoviesAPINeo(nextPage)
-            sortBy(SortMethod.fromLabel(selectedSortOption.value?: SortMethod.ReleaseDate.label))
+            sortBy(SortMethod.fromLabel(selectedSortOption.value ?: SortMethod.ReleaseDate.label))
         }
     }
 
     fun getMovieDetails(movieId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            val movie = movieRepo.getMovieDetailsDB(movieId)
-            if (movie.hasCalledDetailApi)
-                movieRepo.selectedMovie.postValue(movie)
-            else
-                movieRepo.getMovieDetailsAPI(movieId)
+            movieRepo.getMovieDetails(movieId)
         }
     }
 }

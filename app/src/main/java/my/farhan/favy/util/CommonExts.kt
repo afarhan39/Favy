@@ -1,6 +1,9 @@
 package my.farhan.favy.util
 
 import android.util.Log
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -26,4 +29,25 @@ fun String.toEpoch(): Long {
         Log.e(TAG, e.toString())
         0L
     }
+}
+
+fun <T> LiveData<T>.observeOnceNonNull(lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
+    observe(lifecycleOwner, object : Observer<T> {
+        override fun onChanged(t: T?) {
+            observer.onChanged(t)
+            t ?: return
+            if (t is List<*>)
+                if (t.isNullOrEmpty()) return
+            removeObserver(this)
+        }
+    })
+}
+
+fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
+    observe(lifecycleOwner, object : Observer<T> {
+        override fun onChanged(t: T?) {
+            observer.onChanged(t)
+            removeObserver(this)
+        }
+    })
 }

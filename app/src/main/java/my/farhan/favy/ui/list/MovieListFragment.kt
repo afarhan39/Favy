@@ -17,11 +17,11 @@ import com.liaoinstan.springview.container.AutoFooter
 import com.liaoinstan.springview.widget.SpringView
 import my.farhan.favy.R
 import my.farhan.favy.data.SortMethod
-import my.farhan.favy.data.db.Movie
 import my.farhan.favy.data.network.Status
 import my.farhan.favy.databinding.FragmentMovieListBinding
 import my.farhan.favy.util.SpacesItemDecoration
 import my.farhan.favy.util.TAG
+import my.farhan.favy.util.observeOnceNonNull
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MovieListFragment : Fragment(), MoviesAdapter.Listener {
@@ -36,6 +36,7 @@ class MovieListFragment : Fragment(), MoviesAdapter.Listener {
     ): View {
         bv = DataBindingUtil.inflate(inflater, R.layout.fragment_movie_list, container, false)
         bv.lifecycleOwner = this
+        Log.d(TAG, "onCreateView")
         return bv.root
     }
 
@@ -58,11 +59,12 @@ class MovieListFragment : Fragment(), MoviesAdapter.Listener {
         bv.svContainer.footer = AutoFooter()
     }
 
-    override fun onClick(movie: Movie) {
-        Log.d(TAG, movie.title)
-        movieListVM.getMovieDetails(movie.movieId)
-        movieListVM.selectedMovie.observe(viewLifecycleOwner, {
-            findNavController().navigate(R.id.actListToDetail)
+    override fun onClickMovie(movieId: Int) {
+        movieListVM.getMovieDetails(movieId)
+        movieListVM.selectedMovie.observeOnceNonNull(viewLifecycleOwner, {
+            if (it.hasCalledDetailApi) {
+                findNavController().navigate(R.id.actListToDetail)
+            }
         })
     }
 
@@ -83,30 +85,28 @@ class MovieListFragment : Fragment(), MoviesAdapter.Listener {
     }
 
     private fun setAdapter() {
-        moviesAdapter = MoviesAdapter(requireContext(), this)
+        Log.d(TAG, "setAdapter")
+        moviesAdapter = MoviesAdapter(this)
         bv.rvMovies.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
         bv.rvMovies.adapter = moviesAdapter
         val decoration = SpacesItemDecoration(16)
         bv.rvMovies.itemAnimator = DefaultItemAnimator()
         bv.rvMovies.addItemDecoration(decoration)
-        movieListVM.moviesNeo.observe(viewLifecycleOwner, {
+        movieListVM.movies.observe(viewLifecycleOwner, {
             Log.d(TAG, "moviesNeo: ${it.size}")
             if (it.isNotEmpty() && it != null) {
-                moviesAdapter.setMovies(it)
+                moviesAdapter.submitList(it)
             }
         })
         movieListVM.apiEvent.observe(viewLifecycleOwner, {
             when (it.status) {
                 Status.SUCCESS -> {
-                    Log.d(TAG, "API Success")
                     bv.svContainer.onFinishFreshAndLoad()
                 }
                 Status.ERROR -> {
-                    Log.d(TAG, "API Fail")
                     bv.svContainer.onFinishFreshAndLoad()
                 }
                 Status.LOADING -> {
-                    Log.d(TAG, "API Loading")
                 }
             }
         })

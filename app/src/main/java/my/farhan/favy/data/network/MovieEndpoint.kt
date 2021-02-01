@@ -8,16 +8,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MovieEndpoint {
-
-    @GET("discover/movie")
-    suspend fun getDiscoverMovie(
-        @Query("api_key") apiKey: String,
-        @Query("primary_release_date.lte") releaseDateLTE: String,
-        @Query("sort_by") sortBy: String,
-        @Query("page") page: String
-    )
-            : Response<MovieListRes>
-
     @GET("movie/now_playing")
     suspend fun getNowPlayingMovie(
         @Query("api_key") apiKey: String,

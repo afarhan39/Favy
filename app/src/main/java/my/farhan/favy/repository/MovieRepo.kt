@@ -13,68 +13,28 @@ import my.farhan.favy.util.TAG
 import my.farhan.favy.util.toEpoch
 
 class MovieRepo(private val api: MovieEndpoint, private val dao: MovieDao) {
-    val moviesLD = dao.findAllLD()
-    val selectedMovie = MutableLiveData<Movie>()
     val apiEvent = MutableLiveData<ApiEvent>()
+    private val _movies = MutableLiveData<List<Movie>>()
+    private val _selectedMovie = MutableLiveData<Movie>()
 
-    private val moviesNeo = MutableLiveData<List<Movie>>()
-
-    fun getAllMovies(): LiveData<List<Movie>> = moviesNeo
+    fun getAllMovies(): LiveData<List<Movie>> = _movies
+    fun getSelectedMovie(): LiveData<Movie> = _selectedMovie
 
     suspend fun sortBy(sortMethod: SortMethod) {
         val temp = dao.findAll()
         when (sortMethod) {
             SortMethod.Rating -> {
-                moviesNeo.postValue(temp.sortedByDescending { it.voteAverage })
+                _movies.postValue(temp.sortedByDescending { it.voteAverage })
             }
             SortMethod.Alphabetical -> {
-                moviesNeo.postValue(temp.sortedBy { it.title })
+                _movies.postValue(temp.sortedBy { it.title })
             }
             SortMethod.Popularity -> {
-                moviesNeo.postValue(temp.sortedByDescending { it.popularity })
+                _movies.postValue(temp.sortedByDescending { it.popularity })
             }
             else -> {
-                moviesNeo.postValue(temp.sortedByDescending { it.epochRelease })
+                _movies.postValue(temp.sortedByDescending { it.epochRelease })
             }
-        }
-    }
-
-    suspend fun discoverMoviesAPI() {
-        try {
-            val response = api.getDiscoverMovie(
-                "328c283cd27bd1877d9080ccb1604c91",
-                "2016-12-31",
-                "release_date.desc",
-                "1"
-            )
-            if (response.isSuccessful) {
-                val list = ArrayList<Movie>()
-                for (item in response.body()!!.results) {
-                    val backDropUrl =
-                        if (item.backdropPath != null) "https://image.tmdb.org/t/p/w780/${item.backdropPath}"
-                        else ""
-                    val posterUrl =
-                        if (item.posterPath != null) "https://image.tmdb.org/t/p/w342/${item.posterPath}"
-                        else ""
-                    list.add(
-                        Movie(
-                            item.id,
-                            backDropUrl,
-                            posterUrl,
-                            item.title,
-                            item.popularity,
-                            item.releaseDate,
-                            item.releaseDate.toEpoch(),
-                            item.overview,
-                            item.voteAverage,
-                            item.voteCount
-                        )
-                    )
-                }
-                dao.addList(list)
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, e.toString())
         }
     }
 
@@ -87,7 +47,6 @@ class MovieRepo(private val api: MovieEndpoint, private val dao: MovieDao) {
             )
             if (response.isSuccessful) {
                 if (page == 1) dao.deleteAllMovie()
-                apiEvent.postValue(ApiEvent(Status.SUCCESS, ""))
                 for (item in response.body()!!.results) {
                     val backDropUrl =
                         if (item.backdropPath != null) "https://image.tmdb.org/t/p/w780/${item.backdropPath}"
@@ -110,6 +69,7 @@ class MovieRepo(private val api: MovieEndpoint, private val dao: MovieDao) {
                         )
                     )
                 }
+                apiEvent.postValue(ApiEvent(Status.SUCCESS, ""))
             }
         } catch (e: Exception) {
             Log.e(TAG, e.toString())
@@ -117,27 +77,35 @@ class MovieRepo(private val api: MovieEndpoint, private val dao: MovieDao) {
         }
     }
 
-    suspend fun getMovieDetailsAPI(movieId: Int) {
+    private suspend fun getMovieDetailsAPI(movieId: Int) {
         try {
             apiEvent.postValue(ApiEvent(Status.LOADING, ""))
             val response = api.getMovie(
                 movieId.toString(), "328c283cd27bd1877d9080ccb1604c91"
             )
             if (response.isSuccessful) {
-                apiEvent.postValue(ApiEvent(Status.SUCCESS, ""))
                 val movie = dao.findMovie(movieId)
                 movie.hasCalledDetailApi = true
                 movie.genre = response.body()!!.genres.map { it.name }
                 movie.runTime = response.body()!!.runtime
-                selectedMovie.postValue(movie)
                 dao.add(movie)
+                apiEvent.postValue(ApiEvent(Status.SUCCESS, "detail"))
+                _selectedMovie.postValue(movie)
             }
         } catch (e: Exception) {
             apiEvent.postValue(ApiEvent(Status.ERROR, e.toString()))
         }
     }
 
-    suspend fun getMovieDetailsDB(movieId: Int): Movie {
+    private suspend fun getMovieDetailsDB(movieId: Int): Movie {
         return dao.findMovie(movieId)
+    }
+
+    suspend fun getMovieDetails(movieId: Int) {
+        val movie = getMovieDetailsDB(movieId)
+        if (movie.hasCalledDetailApi)
+            _selectedMovie.postValue(movie)
+        else
+            getMovieDetailsAPI(movieId)
     }
 }
