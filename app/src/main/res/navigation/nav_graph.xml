@@ -11,8 +11,7 @@
         tools:layout="@layout/fragment_movie_list">
         <action
             android:id="@+id/actListToDetail"
-            app:destination="@id/MovieDetailFragment"
-            app:launchSingleTop="true" />
+            app:destination="@id/MovieDetailFragment" />
     </fragment>
 
     <fragment
