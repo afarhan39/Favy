@@ -35,7 +35,7 @@ class MovieListActivity : AppCompatActivity(), MoviesAdapter.Listener {
         bv.activity = this
         bv.lifecycleOwner = this
 
-//        movieListVM.sortBy(SortMethod.ReleaseDate)
+        movieListVM.sortBy(SortMethod.ReleaseDate)
         initPopup()
         setAdapter()
         bv.svContainer.setListener(object : SpringView.OnFreshListener {
