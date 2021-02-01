@@ -3,6 +3,7 @@ package my.farhan.favy.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import my.farhan.favy.data.SortMethod
 import my.farhan.favy.data.db.Movie
 import my.farhan.favy.data.db.MovieDao
 import my.farhan.favy.data.network.ApiEvent
@@ -20,12 +21,21 @@ class MovieRepo(private val api: MovieEndpoint, private val dao: MovieDao) {
 
     fun getAllMovies(): LiveData<List<Movie>> = moviesNeo
 
-    suspend fun sortBy(sortMethod: String) {
+    suspend fun sortBy(sortMethod: SortMethod) {
         val temp = dao.findAll()
         when (sortMethod) {
-            "Rating" -> {moviesNeo.postValue(temp.sortedByDescending { it.voteAverage })}
-            "Alphabetical" -> {moviesNeo.postValue(temp.sortedByDescending { it.title })}
-            else -> {moviesNeo.postValue(temp.sortedByDescending { it.epochRelease })}
+            SortMethod.Rating -> {
+                moviesNeo.postValue(temp.sortedByDescending { it.voteAverage })
+            }
+            SortMethod.Alphabetical -> {
+                moviesNeo.postValue(temp.sortedBy { it.title })
+            }
+            SortMethod.Popularity -> {
+                moviesNeo.postValue(temp.sortedByDescending { it.popularity })
+            }
+            else -> {
+                moviesNeo.postValue(temp.sortedByDescending { it.epochRelease })
+            }
         }
     }
 
@@ -105,6 +115,45 @@ class MovieRepo(private val api: MovieEndpoint, private val dao: MovieDao) {
                 dao.addList(list)
             }
         } catch (e: Exception) {
+            apiEvent.postValue(ApiEvent(Status.ERROR, e.toString()))
+        }
+    }
+
+    suspend fun nowPlayingMoviesAPINeo(page: Int) {
+        try {
+            apiEvent.postValue(ApiEvent(Status.LOADING, ""))
+            val response = api.getNowPlayingMovie(
+                "328c283cd27bd1877d9080ccb1604c91",
+                page.toString()
+            )
+            if (response.isSuccessful) {
+                if (page == 1) dao.deleteAllMovie()
+                apiEvent.postValue(ApiEvent(Status.SUCCESS, ""))
+                for (item in response.body()!!.results) {
+                    val backDropUrl =
+                        if (item.backdropPath != null) "https://image.tmdb.org/t/p/w780/${item.backdropPath}"
+                        else ""
+                    val posterUrl =
+                        if (item.posterPath != null) "https://image.tmdb.org/t/p/w342/${item.posterPath}"
+                        else ""
+                    dao.add(
+                        Movie(
+                            item.id,
+                            backDropUrl,
+                            posterUrl,
+                            item.title,
+                            item.popularity,
+                            item.releaseDate,
+                            item.releaseDate.toEpoch(),
+                            item.overview,
+                            item.voteAverage,
+                            item.voteCount
+                        )
+                    )
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, e.toString())
             apiEvent.postValue(ApiEvent(Status.ERROR, e.toString()))
         }
     }

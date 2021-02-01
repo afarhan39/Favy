@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class Movie(
     //list
+    @PrimaryKey
     val movieId: Int,
     val backDropUrl: String,
     val posterUrl: String,
@@ -19,8 +20,5 @@ data class Movie(
     //detail
     var hasCalledDetailApi: Boolean = false,
     var genre: List<String>? = emptyList(),
-    var runTime: Int? = 0,
-
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    var runTime: Int? = 0
 )

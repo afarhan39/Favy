@@ -5,19 +5,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import my.farhan.favy.data.SortMethod
 import my.farhan.favy.repository.MovieRepo
 
 class MovieListVM(private val movieRepo: MovieRepo) : ViewModel() {
     val selectedMovie = movieRepo.selectedMovie
-    val sortOptionList = listOf("Release Date", "Alphabetical", "Rating")
-    val selectedSortOption = MutableLiveData(sortOptionList.first())
+    val sortOptionList = SortMethod.values().map { it.label }
+    val selectedSortOption = MutableLiveData(SortMethod.ReleaseDate.label)
     private val currentPage = MutableLiveData(1)
     val apiEvent = movieRepo.apiEvent
 
     val moviesNeo = movieRepo.getAllMovies()
 
-    fun sortBy(sortMethod: String) {
+    fun sortBy(sortMethod: SortMethod) {
         viewModelScope.launch(Dispatchers.IO) {
+            selectedSortOption.postValue(sortMethod.label)
             movieRepo.sortBy(sortMethod)
         }
     }
@@ -25,7 +27,7 @@ class MovieListVM(private val movieRepo: MovieRepo) : ViewModel() {
     fun onRefreshMovies() {
         currentPage.value = 1
         viewModelScope.launch(Dispatchers.IO) {
-            movieRepo.nowPlayingMoviesAPI(1)
+            movieRepo.nowPlayingMoviesAPINeo(1)
         }
     }
 
@@ -33,7 +35,7 @@ class MovieListVM(private val movieRepo: MovieRepo) : ViewModel() {
         val nextPage = currentPage.value!! + 1
         currentPage.value = nextPage
         viewModelScope.launch(Dispatchers.IO) {
-            movieRepo.nowPlayingMoviesAPI(nextPage)
+            movieRepo.nowPlayingMoviesAPINeo(nextPage)
         }
     }
 

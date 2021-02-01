@@ -21,7 +21,7 @@ interface MovieDao {
     fun findMovieLD(id: Int): LiveData<Movie>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addList(users: List<Movie>)
+    fun addList(movies: List<Movie>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun add(movie: Movie)

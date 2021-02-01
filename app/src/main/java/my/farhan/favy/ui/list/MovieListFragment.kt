@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.liaoinstan.springview.container.AutoFooter
 import com.liaoinstan.springview.widget.SpringView
 import my.farhan.favy.R
+import my.farhan.favy.data.SortMethod
 import my.farhan.favy.data.db.Movie
 import my.farhan.favy.data.network.Status
 import my.farhan.favy.databinding.FragmentMovieListBinding
@@ -41,6 +42,7 @@ class MovieListFragment : Fragment(), MoviesAdapter.Listener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         bv.vm = movieListVM
+        movieListVM.sortBy(SortMethod.ReleaseDate)
         bv.fragment = this
         initPopup()
         setAdapter()
@@ -70,8 +72,8 @@ class MovieListFragment : Fragment(), MoviesAdapter.Listener {
             sortPopup.menu.add(item)
 
         sortPopup.setOnMenuItemClickListener { menuItem: MenuItem ->
-            movieListVM.selectedSortOption.postValue(menuItem.title.toString())
-            movieListVM.sortBy(menuItem.title.toString())
+            val sortMethod = SortMethod.fromLabel(menuItem.toString())
+            movieListVM.sortBy(sortMethod)
             true
         }
     }
