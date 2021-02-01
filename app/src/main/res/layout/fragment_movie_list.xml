@@ -8,6 +8,10 @@
         <variable
             name="vm"
             type="my.farhan.favy.ui.list.MovieListVM" />
+
+        <variable
+            name="fragment"
+            type="my.farhan.favy.ui.list.MovieListFragment" />
     </data>
 
 
@@ -20,7 +24,8 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:src="@drawable/ic_launcher_foreground"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/svContainer"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -30,20 +35,50 @@
             android:text="@string/app_name"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
             app:layout_constraintBottom_toBottomOf="@id/ivApp"
-            app:layout_constraintStart_toEndOf="@id/ivApp"
+            app:layout_constraintEnd_toStartOf="@id/ivApp"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
-            android:id="@+id/ivSort"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clSort"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
             android:background="?attr/selectableItemBackground"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:onClick="@{() -> fragment.showSortPopup()}"
             app:layout_constraintBottom_toBottomOf="@id/ivApp"
-            android:src="@drawable/ic_sort"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
+            <ImageButton
+                android:id="@+id/ivSort"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_sort"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/ivSortLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{vm.selectedSortOption}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/ivSort"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/ivDown"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_down"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/ivSortLabel"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.liaoinstan.springview.widget.SpringView
             android:id="@+id/svContainer"
@@ -52,6 +87,7 @@
             app:footer="@layout/view_header_footer"
             app:header="@layout/view_header_footer"
             app:hideIfEmpty="@{vm.movieList.empty}"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ivApp"
             app:type="follow">
 

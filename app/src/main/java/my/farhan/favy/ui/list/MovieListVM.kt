@@ -1,6 +1,7 @@
 package my.farhan.favy.ui.list
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -11,6 +12,8 @@ import my.farhan.favy.util.TAG
 class MovieListVM(private val movieRepo: MovieRepo) : ViewModel() {
     val movieList = movieRepo.moviesLD
     val selectedMovie = movieRepo.selectedMovie
+    val sortOptionList = listOf("Release Date", "Alphabetical", "Rating")
+    val selectedSortOption = MutableLiveData(sortOptionList.first())
 
     fun onLoadMovies() {
         viewModelScope.launch(Dispatchers.IO) {
