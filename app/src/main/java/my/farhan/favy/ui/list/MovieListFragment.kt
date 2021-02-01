@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.liaoinstan.springview.widget.SpringView
 import my.farhan.favy.R
 import my.farhan.favy.data.db.Movie
+import my.farhan.favy.data.network.Status
 import my.farhan.favy.databinding.FragmentMovieListBinding
 import my.farhan.favy.util.SpacesItemDecoration
 import my.farhan.favy.util.TAG
@@ -44,18 +45,11 @@ class MovieListFragment : Fragment(), MoviesAdapter.Listener {
         initPopup()
         bv.svContainer.setListener(object : SpringView.OnFreshListener {
             override fun onRefresh() {
-                movieListVM.onLoadMovies()
-                Handler(Looper.getMainLooper()).postDelayed(
-                    { bv.svContainer.onFinishFreshAndLoad() },
-                    1000
-                )
+                movieListVM.onRefreshMovies()
             }
 
             override fun onLoadmore() {
-                Handler(Looper.getMainLooper()).postDelayed(
-                    { bv.svContainer.onFinishFreshAndLoad() },
-                    1000
-                )
+                movieListVM.onLoadMoreMovies()
             }
         })
 
@@ -67,6 +61,13 @@ class MovieListFragment : Fragment(), MoviesAdapter.Listener {
         movieListVM.movieList.observe(viewLifecycleOwner, {
             if (it.isNotEmpty() && it != null) {
                 moviesAdapter.setMovies(it)
+            }
+        })
+        movieListVM.apiEvent.observe(viewLifecycleOwner, {
+            when (it.status) {
+                Status.SUCCESS, Status.ERROR -> bv.svContainer.onFinishFreshAndLoad()
+                Status.LOADING -> {
+                }
             }
         })
     }

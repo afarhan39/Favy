@@ -24,7 +24,6 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:src="@drawable/ic_launcher_foreground"
-            app:layout_constraintBottom_toTopOf="@id/svContainer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -102,7 +101,7 @@
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> vm.onLoadMovies()}"
+            android:onClick="@{() -> vm.onRefreshMovies()}"
             android:text="@string/retry"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

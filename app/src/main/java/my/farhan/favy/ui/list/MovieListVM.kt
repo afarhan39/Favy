@@ -1,24 +1,32 @@
 package my.farhan.favy.ui.list
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import my.farhan.favy.repository.MovieRepo
-import my.farhan.favy.util.TAG
 
 class MovieListVM(private val movieRepo: MovieRepo) : ViewModel() {
     val movieList = movieRepo.moviesLD
     val selectedMovie = movieRepo.selectedMovie
     val sortOptionList = listOf("Release Date", "Alphabetical", "Rating")
     val selectedSortOption = MutableLiveData(sortOptionList.first())
+    private val currentPage = MutableLiveData(1)
+    val apiEvent = movieRepo.apiEvent
 
-    fun onLoadMovies() {
+    fun onRefreshMovies() {
+        currentPage.value = 1
         viewModelScope.launch(Dispatchers.IO) {
-            movieRepo.discoverMoviesAPI()
-            Log.d(TAG, "aaaa")
+            movieRepo.nowPlayingMoviesAPI(1)
+        }
+    }
+
+    fun onLoadMoreMovies() {
+        val nextPage = currentPage.value!! + 1
+        currentPage.value = nextPage
+        viewModelScope.launch(Dispatchers.IO) {
+            movieRepo.nowPlayingMoviesAPI(nextPage)
         }
     }
 
