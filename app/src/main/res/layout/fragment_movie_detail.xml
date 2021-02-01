@@ -23,7 +23,6 @@
                 android:id="@+id/ivBackdrop"
                 android:layout_width="match_parent"
                 android:layout_height="400dp"
-                android:scaleType="centerCrop"
                 imageUrl="@{vm.selectedMovie.backDropUrl}"
                 app:layout_constraintTop_toTopOf="parent" />
 

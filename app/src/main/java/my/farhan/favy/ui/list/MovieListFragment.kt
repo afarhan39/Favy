@@ -10,6 +10,7 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.liaoinstan.springview.container.AutoFooter
@@ -83,6 +84,7 @@ class MovieListFragment : Fragment(), MoviesAdapter.Listener {
         bv.rvMovies.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
         bv.rvMovies.adapter = moviesAdapter
         val decoration = SpacesItemDecoration(16)
+        bv.rvMovies.itemAnimator = DefaultItemAnimator()
         bv.rvMovies.addItemDecoration(decoration)
         movieListVM.movieList.observe(viewLifecycleOwner, {
             if (it.isNotEmpty() && it != null) {

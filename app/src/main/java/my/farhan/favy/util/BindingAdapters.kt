@@ -25,7 +25,7 @@ object BindingAdapters {
     @JvmStatic
     fun loadImage(view: ImageView, url: String) {
         if (url.isNotEmpty())
-            Glide.with(view.context).load(url).into(view)
+            Glide.with(view.context).load(url).centerCrop().into(view)
         else
             view.setImageResource(R.drawable.ic_no_image)
     }

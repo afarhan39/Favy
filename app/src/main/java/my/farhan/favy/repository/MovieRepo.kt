@@ -77,6 +77,8 @@ class MovieRepo(private val api: MovieEndpoint, private val dao: MovieDao) {
                         )
                     )
                 }
+                if (page == 1)
+                    dao.deleteAllMovie()
                 dao.addList(list)
             }
         } catch (e: Exception) {

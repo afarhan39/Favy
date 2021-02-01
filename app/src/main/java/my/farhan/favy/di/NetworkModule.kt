@@ -1,8 +1,8 @@
 package my.farhan.favy.di
 
+import my.farhan.favy.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.koin.android.BuildConfig.DEBUG
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -14,9 +14,9 @@ val networkModule = module {
         val okHttpClientBuilder = OkHttpClient.Builder()
             .connectTimeout(5, TimeUnit.SECONDS)
             .readTimeout(5, TimeUnit.SECONDS)
-        if (DEBUG) {
+        if (BuildConfig.DEBUG) {
             val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
+                level = HttpLoggingInterceptor.Level.HEADERS
             }
             okHttpClientBuilder.addInterceptor(httpLoggingInterceptor)
         }
