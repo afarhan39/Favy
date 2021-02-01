@@ -9,6 +9,7 @@ import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import my.farhan.favy.R
 import my.farhan.favy.databinding.FragmentMovieDetailBinding
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -43,5 +44,9 @@ class MovieDetailFragment : Fragment() {
         customTabColorBuilder.setNavigationBarDividerColor(resources.getColor(R.color.black, null))
         customTabBuilder.setDefaultColorSchemeParams(customTabColorBuilder.build())
         customTabBuilder.build().launchUrl(requireContext(), Uri.parse(url))
+    }
+
+    fun onBackPressed() {
+        findNavController().navigateUp()
     }
 }

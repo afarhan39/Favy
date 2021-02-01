@@ -15,13 +15,44 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:id="@+id/ivApp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ic_launcher_foreground"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/mtvAppTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            app:layout_constraintBottom_toBottomOf="@id/ivApp"
+            app:layout_constraintStart_toEndOf="@id/ivApp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/ivSort"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/ivApp"
+            android:src="@drawable/ic_sort"/>
+
+
+
         <com.liaoinstan.springview.widget.SpringView
             android:id="@+id/svContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             app:footer="@layout/view_header_footer"
             app:header="@layout/view_header_footer"
             app:hideIfEmpty="@{vm.movieList.empty}"
+            app:layout_constraintTop_toBottomOf="@id/ivApp"
             app:type="follow">
 
             <androidx.recyclerview.widget.RecyclerView

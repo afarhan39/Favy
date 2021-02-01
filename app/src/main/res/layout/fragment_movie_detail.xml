@@ -27,6 +27,15 @@
                 imageUrl="@{vm.selectedMovie.backDropUrl}"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageButton
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?selectableItemBackground"
+                android:src="@drawable/ic_back"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:onClick="@{() -> fragment.onBackPressed()}"/>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clContent"
                 android:layout_width="match_parent"
