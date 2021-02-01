@@ -90,14 +90,23 @@ class MovieListFragment : Fragment(), MoviesAdapter.Listener {
         bv.rvMovies.itemAnimator = DefaultItemAnimator()
         bv.rvMovies.addItemDecoration(decoration)
         movieListVM.moviesNeo.observe(viewLifecycleOwner, {
+            Log.d(TAG, "moviesNeo: ${it.size}")
             if (it.isNotEmpty() && it != null) {
                 moviesAdapter.setMovies(it)
             }
         })
         movieListVM.apiEvent.observe(viewLifecycleOwner, {
             when (it.status) {
-                Status.SUCCESS, Status.ERROR -> bv.svContainer.onFinishFreshAndLoad()
+                Status.SUCCESS -> {
+                    Log.d(TAG, "API Success")
+                    bv.svContainer.onFinishFreshAndLoad()
+                }
+                Status.ERROR -> {
+                    Log.d(TAG, "API Fail")
+                    bv.svContainer.onFinishFreshAndLoad()
+                }
                 Status.LOADING -> {
+                    Log.d(TAG, "API Loading")
                 }
             }
         })

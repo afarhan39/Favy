@@ -78,47 +78,6 @@ class MovieRepo(private val api: MovieEndpoint, private val dao: MovieDao) {
         }
     }
 
-    suspend fun nowPlayingMoviesAPI(page: Int) {
-        try {
-            apiEvent.postValue(ApiEvent(Status.LOADING, ""))
-            val response = api.getNowPlayingMovie(
-                "328c283cd27bd1877d9080ccb1604c91",
-                page.toString()
-            )
-            if (response.isSuccessful) {
-                apiEvent.postValue(ApiEvent(Status.SUCCESS, ""))
-                val list = ArrayList<Movie>()
-                for (item in response.body()!!.results) {
-                    val backDropUrl =
-                        if (item.backdropPath != null) "https://image.tmdb.org/t/p/w780/${item.backdropPath}"
-                        else ""
-                    val posterUrl =
-                        if (item.posterPath != null) "https://image.tmdb.org/t/p/w342/${item.posterPath}"
-                        else ""
-                    list.add(
-                        Movie(
-                            item.id,
-                            backDropUrl,
-                            posterUrl,
-                            item.title,
-                            item.popularity,
-                            item.releaseDate,
-                            item.releaseDate.toEpoch(),
-                            item.overview,
-                            item.voteAverage,
-                            item.voteCount
-                        )
-                    )
-                }
-                if (page == 1)
-                    dao.deleteAllMovie()
-                dao.addList(list)
-            }
-        } catch (e: Exception) {
-            apiEvent.postValue(ApiEvent(Status.ERROR, e.toString()))
-        }
-    }
-
     suspend fun nowPlayingMoviesAPINeo(page: Int) {
         try {
             apiEvent.postValue(ApiEvent(Status.LOADING, ""))

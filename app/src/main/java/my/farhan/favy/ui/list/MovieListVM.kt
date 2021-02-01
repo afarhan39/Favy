@@ -28,14 +28,16 @@ class MovieListVM(private val movieRepo: MovieRepo) : ViewModel() {
         currentPage.value = 1
         viewModelScope.launch(Dispatchers.IO) {
             movieRepo.nowPlayingMoviesAPINeo(1)
+            sortBy(SortMethod.ReleaseDate)
         }
     }
 
     fun onLoadMoreMovies() {
-        val nextPage = currentPage.value!! + 1
+        val nextPage = (currentPage.value ?: 0) + 1
         currentPage.value = nextPage
         viewModelScope.launch(Dispatchers.IO) {
             movieRepo.nowPlayingMoviesAPINeo(nextPage)
+            sortBy(SortMethod.fromLabel(selectedSortOption.value?: SortMethod.ReleaseDate.label))
         }
     }
 
