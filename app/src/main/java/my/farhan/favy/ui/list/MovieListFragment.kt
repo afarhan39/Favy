@@ -1,8 +1,6 @@
 package my.farhan.favy.ui.list
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -14,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.liaoinstan.springview.container.AutoFooter
 import com.liaoinstan.springview.widget.SpringView
 import my.farhan.favy.R
 import my.farhan.favy.data.db.Movie
@@ -43,6 +42,7 @@ class MovieListFragment : Fragment(), MoviesAdapter.Listener {
         bv.vm = movieListVM
         bv.fragment = this
         initPopup()
+        setAdapter()
         bv.svContainer.setListener(object : SpringView.OnFreshListener {
             override fun onRefresh() {
                 movieListVM.onRefreshMovies()
@@ -52,24 +52,7 @@ class MovieListFragment : Fragment(), MoviesAdapter.Listener {
                 movieListVM.onLoadMoreMovies()
             }
         })
-
-        moviesAdapter = MoviesAdapter(requireContext(), this)
-        bv.rvMovies.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
-        bv.rvMovies.adapter = moviesAdapter
-        val decoration = SpacesItemDecoration(16)
-        bv.rvMovies.addItemDecoration(decoration)
-        movieListVM.movieList.observe(viewLifecycleOwner, {
-            if (it.isNotEmpty() && it != null) {
-                moviesAdapter.setMovies(it)
-            }
-        })
-        movieListVM.apiEvent.observe(viewLifecycleOwner, {
-            when (it.status) {
-                Status.SUCCESS, Status.ERROR -> bv.svContainer.onFinishFreshAndLoad()
-                Status.LOADING -> {
-                }
-            }
-        })
+        bv.svContainer.footer = AutoFooter()
     }
 
     override fun onClick(movie: Movie) {
@@ -93,5 +76,25 @@ class MovieListFragment : Fragment(), MoviesAdapter.Listener {
 
     fun showSortPopup() {
         sortPopup.show()
+    }
+
+    private fun setAdapter() {
+        moviesAdapter = MoviesAdapter(requireContext(), this)
+        bv.rvMovies.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
+        bv.rvMovies.adapter = moviesAdapter
+        val decoration = SpacesItemDecoration(16)
+        bv.rvMovies.addItemDecoration(decoration)
+        movieListVM.movieList.observe(viewLifecycleOwner, {
+            if (it.isNotEmpty() && it != null) {
+                moviesAdapter.setMovies(it)
+            }
+        })
+        movieListVM.apiEvent.observe(viewLifecycleOwner, {
+            when (it.status) {
+                Status.SUCCESS, Status.ERROR -> bv.svContainer.onFinishFreshAndLoad()
+                Status.LOADING -> {
+                }
+            }
+        })
     }
 }

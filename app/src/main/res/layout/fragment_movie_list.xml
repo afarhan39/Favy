@@ -83,7 +83,6 @@
             android:id="@+id/svContainer"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:footer="@layout/view_header_footer"
             app:header="@layout/view_header_footer"
             app:hideIfEmpty="@{vm.movieList.empty}"
             app:layout_constraintBottom_toBottomOf="parent"

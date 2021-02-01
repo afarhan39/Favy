@@ -10,7 +10,7 @@ import org.koin.dsl.module
 val databaseModule = module {
 
     fun provideDatabase(application: Application): MovieDatabase {
-        return Room.databaseBuilder(application, MovieDatabase::class.java, "countries")
+        return Room.databaseBuilder(application, MovieDatabase::class.java, "favy")
             .fallbackToDestructiveMigration()
             .build()
     }
