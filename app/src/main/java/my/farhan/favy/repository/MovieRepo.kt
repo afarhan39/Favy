@@ -1,6 +1,7 @@
 package my.farhan.favy.repository
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import my.farhan.favy.data.db.Movie
 import my.farhan.favy.data.db.MovieDao
@@ -14,6 +15,19 @@ class MovieRepo(private val api: MovieEndpoint, private val dao: MovieDao) {
     val moviesLD = dao.findAllLD()
     val selectedMovie = MutableLiveData<Movie>()
     val apiEvent = MutableLiveData<ApiEvent>()
+
+    private val moviesNeo = MutableLiveData<List<Movie>>()
+
+    fun getAllMovies(): LiveData<List<Movie>> = moviesNeo
+
+    suspend fun sortBy(sortMethod: String) {
+        val temp = dao.findAll()
+        when (sortMethod) {
+            "Rating" -> {moviesNeo.postValue(temp.sortedByDescending { it.voteAverage })}
+            "Alphabetical" -> {moviesNeo.postValue(temp.sortedByDescending { it.title })}
+            else -> {moviesNeo.postValue(temp.sortedByDescending { it.epochRelease })}
+        }
+    }
 
     suspend fun discoverMoviesAPI() {
         try {

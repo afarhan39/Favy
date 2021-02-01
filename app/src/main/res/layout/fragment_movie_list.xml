@@ -84,7 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:header="@layout/view_header_footer"
-            app:hideIfEmpty="@{vm.movieListSorted.empty}"
+            app:hideIfEmpty="@{vm.moviesNeo.empty}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ivApp"
             app:type="follow">
@@ -106,7 +106,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:showIfEmpty="@{vm.movieListSorted.empty}" />
+            app:showIfEmpty="@{vm.moviesNeo.empty}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

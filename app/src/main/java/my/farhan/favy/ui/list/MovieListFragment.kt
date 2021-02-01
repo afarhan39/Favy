@@ -71,6 +71,7 @@ class MovieListFragment : Fragment(), MoviesAdapter.Listener {
 
         sortPopup.setOnMenuItemClickListener { menuItem: MenuItem ->
             movieListVM.selectedSortOption.postValue(menuItem.title.toString())
+            movieListVM.sortBy(menuItem.title.toString())
             true
         }
     }
@@ -86,7 +87,7 @@ class MovieListFragment : Fragment(), MoviesAdapter.Listener {
         val decoration = SpacesItemDecoration(16)
         bv.rvMovies.itemAnimator = DefaultItemAnimator()
         bv.rvMovies.addItemDecoration(decoration)
-        movieListVM.movieListSorted.observe(viewLifecycleOwner, {
+        movieListVM.moviesNeo.observe(viewLifecycleOwner, {
             if (it.isNotEmpty() && it != null) {
                 moviesAdapter.setMovies(it)
             }
