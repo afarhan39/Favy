@@ -12,12 +12,13 @@ data class Movie(
     val title: String,
     val popularity: Double,
     val releaseDate: String,
+    val epochRelease: Long,
+    val overview: String,
+    val voteAverage: Double,
+    val voteCount: Int,
     //detail
     var hasCalledDetailApi: Boolean = false,
     var genre: List<String>? = emptyList(),
-    var overview: String? = "",
-    var voteAverage: Double? = 0.0,
-    var voteCount: Int? = 0,
     var runTime: Int? = 0,
 
     @PrimaryKey(autoGenerate = true)

@@ -8,6 +8,7 @@ import my.farhan.favy.data.network.ApiEvent
 import my.farhan.favy.data.network.MovieEndpoint
 import my.farhan.favy.data.network.Status
 import my.farhan.favy.util.TAG
+import my.farhan.favy.util.toEpoch
 
 class MovieRepo(private val api: MovieEndpoint, private val dao: MovieDao) {
     val moviesLD = dao.findAllLD()
@@ -38,7 +39,11 @@ class MovieRepo(private val api: MovieEndpoint, private val dao: MovieDao) {
                             posterUrl,
                             item.title,
                             item.popularity,
-                            item.releaseDate
+                            item.releaseDate,
+                            item.releaseDate.toEpoch(),
+                            item.overview,
+                            item.voteAverage,
+                            item.voteCount
                         )
                     )
                 }
@@ -73,7 +78,11 @@ class MovieRepo(private val api: MovieEndpoint, private val dao: MovieDao) {
                             posterUrl,
                             item.title,
                             item.popularity,
-                            item.releaseDate
+                            item.releaseDate,
+                            item.releaseDate.toEpoch(),
+                            item.overview,
+                            item.voteAverage,
+                            item.voteCount
                         )
                     )
                 }
@@ -97,9 +106,6 @@ class MovieRepo(private val api: MovieEndpoint, private val dao: MovieDao) {
                 val movie = dao.findMovie(movieId)
                 movie.hasCalledDetailApi = true
                 movie.genre = response.body()!!.genres.map { it.name }
-                movie.overview = response.body()!!.overview
-                movie.voteAverage = response.body()!!.voteAverage
-                movie.voteCount = response.body()!!.voteCount
                 movie.runTime = response.body()!!.runtime
                 selectedMovie.postValue(movie)
                 dao.add(movie)

@@ -1,14 +1,13 @@
 package my.farhan.favy.ui.list
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import my.farhan.favy.data.db.Movie
 import my.farhan.favy.repository.MovieRepo
 
 class MovieListVM(private val movieRepo: MovieRepo) : ViewModel() {
-    val movieList = movieRepo.moviesLD
+    private val movieList = movieRepo.moviesLD
     val selectedMovie = movieRepo.selectedMovie
     val sortOptionList = listOf("Release Date", "Alphabetical", "Rating")
     val selectedSortOption = MutableLiveData(sortOptionList.first())
@@ -37,6 +36,25 @@ class MovieListVM(private val movieRepo: MovieRepo) : ViewModel() {
                 movieRepo.selectedMovie.postValue(movie)
             else
                 movieRepo.getMovieDetailsAPI(movieId)
+        }
+    }
+
+
+    val movieListSorted: LiveData<List<Movie>> = when(selectedSortOption.value) {
+        "Alphabetical" -> {
+            Transformations.map(movieList) {
+                it.sortedByDescending { movie -> movie.title }
+            }
+        }
+        "Rating" -> {
+            Transformations.map(movieList) {
+                it.sortedByDescending { movie -> movie.voteAverage }
+            }
+        }
+        else -> {
+            Transformations.map(movieList) {
+                it.sortedByDescending { movie -> movie.epochRelease }
+            }
         }
     }
 }

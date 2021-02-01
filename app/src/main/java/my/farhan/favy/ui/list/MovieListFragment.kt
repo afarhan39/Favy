@@ -86,7 +86,7 @@ class MovieListFragment : Fragment(), MoviesAdapter.Listener {
         val decoration = SpacesItemDecoration(16)
         bv.rvMovies.itemAnimator = DefaultItemAnimator()
         bv.rvMovies.addItemDecoration(decoration)
-        movieListVM.movieList.observe(viewLifecycleOwner, {
+        movieListVM.movieListSorted.observe(viewLifecycleOwner, {
             if (it.isNotEmpty() && it != null) {
                 moviesAdapter.setMovies(it)
             }
