@@ -5,10 +5,10 @@
     <data>
         <variable
             name="vm"
-            type="my.farhan.movie.ui.detail.MovieDetailVM" />
+            type="my.farhan.favy.ui.detail.MovieDetailVM" />
         <variable
             name="fragment"
-            type="my.farhan.movie.ui.detail.MovieDetailFragment" />
+            type="my.farhan.favy.ui.detail.MovieDetailFragment" />
     </data>
 
     <androidx.core.widget.NestedScrollView

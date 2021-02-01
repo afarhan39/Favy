@@ -9,7 +9,7 @@ android {
     buildToolsVersion "30.0.0"
 
     defaultConfig {
-        applicationId "my.farhan.movie"
+        applicationId "my.farhan.favy"
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 1

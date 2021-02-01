@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">Movie</string>
+    <string name="app_name">Favy</string>
     <string name="retry">Retry?</string>
     <string name="unavailable">Unavailable</string>
     <string name="duration">%d min</string>
     <string name="bookNow">Book Now</string>
     <string name="dash">-</string>
+    <string name="loadMoreMovies">Loading more movies...</string>
 </resources>

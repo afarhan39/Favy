@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/MovieListFragment"
-        android:name="my.farhan.movie.ui.list.MovieListFragment"
+        android:name="my.farhan.favy.ui.list.MovieListFragment"
         tools:layout="@layout/fragment_movie_list">
         <action
             android:id="@+id/actListToDetail"
@@ -16,6 +16,6 @@
 
     <fragment
         android:id="@+id/MovieDetailFragment"
-        android:name="my.farhan.movie.ui.detail.MovieDetailFragment"
+        android:name="my.farhan.favy.ui.detail.MovieDetailFragment"
         tools:layout="@layout/fragment_movie_detail" />
 </navigation>

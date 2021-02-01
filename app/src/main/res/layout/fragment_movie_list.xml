@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="my.farhan.movie.ui.list.MovieListVM" />
+            type="my.farhan.favy.ui.list.MovieListVM" />
     </data>
 
 

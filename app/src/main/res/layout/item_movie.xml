@@ -7,11 +7,11 @@
 
         <variable
             name="movie"
-            type="my.farhan.movie.data.db.Movie" />
+            type="my.farhan.favy.data.db.Movie" />
 
         <variable
             name="listener"
-            type="my.farhan.movie.ui.list.MoviesAdapter.Listener" />
+            type="my.farhan.favy.ui.list.MoviesAdapter.Listener" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
