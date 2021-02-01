@@ -12,6 +12,7 @@ data class Movie(
     val posterUrl: String,
     val title: String,
     val popularity: Double,
+    val releaseDate: String,
     //detail
     var hasCalledDetailApi: Boolean = false,
     var genre: List<String>? = emptyList(),

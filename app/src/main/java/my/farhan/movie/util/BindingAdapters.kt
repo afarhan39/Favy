@@ -2,8 +2,10 @@ package my.farhan.movie.util
 
 import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.textview.MaterialTextView
 import my.farhan.movie.R
 
@@ -66,5 +68,24 @@ object BindingAdapters {
     @JvmStatic
     fun genre(view: MaterialTextView, genre: List<String>) {
         view.text = genre.joinToString(separator = ", ") { it }
+    }
+
+    @BindingAdapter("popularityText")
+    @JvmStatic
+    fun popularityText(view: MaterialTextView, popularity: Double) {
+        if (popularity <= 100)
+            view.text = "${popularity.round(1)}"
+        else
+            view.text = "${popularity.toInt()}"
+    }
+
+    @BindingAdapter("popularityLevel")
+    @JvmStatic
+    fun popularityLevel(view: CircularProgressIndicator, popularity: Double) {
+        view.max = 100
+        if (popularity <= 100)
+            view.setProgressCompat(popularity.toInt(), true)
+        else
+            view.setProgressCompat(100, true)
     }
 }

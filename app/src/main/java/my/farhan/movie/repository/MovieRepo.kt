@@ -28,7 +28,7 @@ class MovieRepo(private val api: MovieEndpoint, private val dao: MovieDao) {
                     val posterUrl =
                         if (item.posterPath != null) "https://image.tmdb.org/t/p/w342/${item.posterPath}"
                         else ""
-                    list.add(Movie(item.id, backDropUrl, posterUrl, item.title, item.popularity))
+                    list.add(Movie(item.id, backDropUrl, posterUrl, item.title, item.popularity, item.releaseDate))
                 }
                 dao.addList(list)
             }
