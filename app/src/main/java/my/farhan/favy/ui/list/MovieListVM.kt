@@ -26,7 +26,7 @@ class MovieListVM(private val movieRepo: MovieRepo) : ViewModel() {
     fun onRefreshMovies() {
         currentPage.value = 1
         viewModelScope.launch(Dispatchers.IO) {
-            movieRepo.nowPlayingMoviesAPINeo(1)
+            movieRepo.nowPlayingMoviesAPI(1)
             sortBy(SortMethod.ReleaseDate)
         }
     }
@@ -35,7 +35,7 @@ class MovieListVM(private val movieRepo: MovieRepo) : ViewModel() {
         val nextPage = (currentPage.value ?: 0) + 1
         currentPage.value = nextPage
         viewModelScope.launch(Dispatchers.IO) {
-            movieRepo.nowPlayingMoviesAPINeo(nextPage)
+            movieRepo.nowPlayingMoviesAPI(nextPage)
             sortBy(SortMethod.fromLabel(selectedSortOption.value ?: SortMethod.ReleaseDate.label))
         }
     }

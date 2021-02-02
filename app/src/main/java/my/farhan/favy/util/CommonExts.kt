@@ -23,7 +23,7 @@ fun Double.round(decimals: Int): Double {
 fun String.toEpoch(): Long {
     return try {
         val parser: DateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val date: Date = parser.parse(this)?: throw Exception("Unable to parse date")
+        val date: Date = parser.parse(this) ?: throw Exception("Unable to parse date")
         date.time
     } catch (e: Exception) {
         Log.e(TAG, e.toString())

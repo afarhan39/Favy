@@ -2,22 +2,12 @@ package my.farhan.favy.ui.detail
 
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import com.liaoinstan.springview.container.AutoFooter
-import com.liaoinstan.springview.widget.SpringView
 import my.farhan.favy.R
-import my.farhan.favy.data.SortMethod
 import my.farhan.favy.databinding.ActivityMovieDetailBinding
-import my.farhan.favy.databinding.ActivityMovieListBinding
-import my.farhan.favy.databinding.FragmentMovieDetailBinding
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MovieDetailActivity : AppCompatActivity() {

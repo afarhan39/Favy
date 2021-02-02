@@ -5,8 +5,9 @@ enum class SortMethod(val label: String) {
     Alphabetical("Alphabetical"),
     Rating("Rating"),
     Popularity("Popularity");
+
     companion object {
         private val map = values().associateBy { it.label }
-        fun fromLabel(label: String): SortMethod = map[label]?: ReleaseDate
+        fun fromLabel(label: String): SortMethod = map[label] ?: ReleaseDate
     }
 }

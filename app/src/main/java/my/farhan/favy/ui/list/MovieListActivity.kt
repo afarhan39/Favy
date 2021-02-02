@@ -2,7 +2,6 @@ package my.farhan.favy.ui.list
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
@@ -18,7 +17,6 @@ import my.farhan.favy.data.network.Status
 import my.farhan.favy.databinding.ActivityMovieListBinding
 import my.farhan.favy.ui.detail.MovieDetailActivity
 import my.farhan.favy.util.SpacesItemDecoration
-import my.farhan.favy.util.TAG
 import my.farhan.favy.util.observeOnceNonNull
 import org.koin.android.viewmodel.ext.android.viewModel
 

@@ -38,8 +38,7 @@ class MovieRepo(private val api: MovieEndpoint, private val dao: MovieDao) {
         }
     }
 
-    suspend fun nowPlayingMoviesAPINeo(page: Int) {
-        Log.d(TAG, "who tapped $page")
+    suspend fun nowPlayingMoviesAPI(page: Int) {
         try {
             apiEvent.postValue(ApiEvent(Status.LOADING, ""))
             val response = api.getNowPlayingMovie(
