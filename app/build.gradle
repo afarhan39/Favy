@@ -15,12 +15,22 @@ android {
         versionCode 1
         versionName "1.0"
 
+        archivesBaseName = "Favy-v$versionName($versionCode)"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
+    signingConfigs {
+        release {
+            storeFile file('../misc/gedungkunci.jks')
+            storePassword "12345qwertyS"
+            keyAlias "12345qwertyS"
+            keyPassword "12345qwertyS"
+            v2SigningEnabled true
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
