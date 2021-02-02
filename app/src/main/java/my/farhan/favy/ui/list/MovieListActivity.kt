@@ -14,6 +14,7 @@ import com.liaoinstan.springview.widget.SpringView
 import my.farhan.favy.R
 import my.farhan.favy.data.SortMethod
 import my.farhan.favy.data.network.Status
+import my.farhan.favy.databinding.ActivityMovieDetailBinding
 import my.farhan.favy.databinding.ActivityMovieListBinding
 import my.farhan.favy.ui.detail.MovieDetailActivity
 import my.farhan.favy.util.SpacesItemDecoration
@@ -26,6 +27,10 @@ class MovieListActivity : AppCompatActivity(), MoviesAdapter.Listener {
     private lateinit var moviesAdapter: MoviesAdapter
     private lateinit var sortPopup: PopupMenu
 
+    /***
+     * [SortMethod.ReleaseDate] is set by default
+     * here all view is also set, such as [initPopup] and [setAdapter]
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bv = DataBindingUtil.setContentView(this, R.layout.activity_movie_list)
@@ -48,6 +53,9 @@ class MovieListActivity : AppCompatActivity(), MoviesAdapter.Listener {
         bv.svContainer.footer = AutoFooter()
     }
 
+    /***
+     * A listener from [MoviesAdapter.Listener.onClickMovie] which pass [movieId] to be looked into
+     */
     override fun onClickMovie(movieId: Int) {
         movieListVM.getMovieDetails(movieId)
         movieListVM.selectedMovie.observeOnceNonNull(this, {
@@ -55,6 +63,10 @@ class MovieListActivity : AppCompatActivity(), MoviesAdapter.Listener {
         })
     }
 
+    /***
+     * [initPopup] use list of [SortMethod.label] to populate menu
+     * and set to new [SortMethod] onMenuItemClick
+     */
     private fun initPopup() {
         sortPopup = PopupMenu(this, bv.clSort)
         for (item in movieListVM.sortOptionList)
@@ -67,10 +79,20 @@ class MovieListActivity : AppCompatActivity(), MoviesAdapter.Listener {
         }
     }
 
+    /***
+     * exposed method to [ActivityMovieListBinding.clSort] to show popup
+     */
     fun showSortPopup() {
         sortPopup.show()
     }
 
+    /***
+     * [ActivityMovieListBinding.rvMovies] is set to StaggeredGridLayoutManager, which have 2 column
+     * [SpacesItemDecoration] is used to have spacing in all directions
+     * [DefaultItemAnimator] is used to have some pleasant UI when load
+     * [MoviesAdapter.submitList] is used to set new list to adapter whenever liveData changes
+     * [MovieListVM.apiEvent] will determine when [ActivityMovieListBinding.svContainer] is finished loading
+     */
     private fun setAdapter() {
         moviesAdapter = MoviesAdapter(this)
         bv.rvMovies.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)

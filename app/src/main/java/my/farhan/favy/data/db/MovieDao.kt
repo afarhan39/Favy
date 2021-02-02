@@ -6,6 +6,9 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
+/***
+ * DAO (Data Access Object) to Access [Movie]
+ */
 @Dao
 interface MovieDao {
     @Query("SELECT * FROM Movie")

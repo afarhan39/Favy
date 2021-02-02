@@ -12,7 +12,7 @@ class MovieListVM(private val movieRepo: MovieRepo) : ViewModel() {
     val sortOptionList = SortMethod.values().map { it.label }
     val selectedSortOption = MutableLiveData(SortMethod.ReleaseDate.label)
     private val currentPage = MutableLiveData(1)
-    val apiEvent = movieRepo.apiEvent
+    val apiEvent = movieRepo.getApiEvent()
     val movies = movieRepo.getAllMovies()
     val selectedMovie = movieRepo.getSelectedMovie()
 

@@ -22,6 +22,9 @@ class MovieDetailActivity : AppCompatActivity() {
         bv.lifecycleOwner = this
     }
 
+    /***
+     * exposed method to [ActivityMovieDetailBinding.mbBookNow] to open WebView
+     */
     fun bookNow() {
         val url = "https://www.cathaycineplexes.com.sg/"
         val customTabBuilder = CustomTabsIntent.Builder()

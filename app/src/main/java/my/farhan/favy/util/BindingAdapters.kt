@@ -8,6 +8,9 @@ import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.textview.MaterialTextView
 import my.farhan.favy.R
 
+/***
+ * Personal best class by far, as it provide bridge between XML and data
+ */
 object BindingAdapters {
     @BindingAdapter(value = ["hideIfEmpty"])
     @JvmStatic
@@ -21,6 +24,12 @@ object BindingAdapters {
         view.visibility = if (isEmpty) View.VISIBLE else View.GONE
     }
 
+    /***
+     * in the event if [url] is empty, it will load [R.drawable.ic_no_image]
+     * [url] is referring to
+     * [my.farhan.favy.data.db.Movie.posterUrl] and
+     * [my.farhan.favy.data.db.Movie.backDropUrl] and
+     */
     @BindingAdapter("imageUrl")
     @JvmStatic
     fun loadImage(view: ImageView, url: String) {
@@ -39,6 +48,9 @@ object BindingAdapters {
             view.text = view.context.getString(R.string.duration, runTime)
     }
 
+    /***
+     * setImageResource to all different vector of rating according to [voteAverage]
+     */
     @BindingAdapter("voteAverageImg")
     @JvmStatic
     fun voteAverageImg(view: ImageView, voteAverage: Double) {
@@ -69,6 +81,9 @@ object BindingAdapters {
         view.text = genre.joinToString(separator = ", ") { it }
     }
 
+    /***
+     * to prevent text overflow, [popularity] will be set to INT if exceed 100
+     */
     @BindingAdapter("popularityText")
     @JvmStatic
     fun popularityText(view: MaterialTextView, popularity: Double) {
@@ -78,6 +93,10 @@ object BindingAdapters {
             view.text = "${popularity.toInt()}"
     }
 
+    /***
+     * [popularity] is strange thing, as it seems it does not have upper limit
+     * thus I set it to 100, and if [popularity] exceeds it, it will shown as max popularity
+     */
     @BindingAdapter("popularityLevel")
     @JvmStatic
     fun popularityLevel(view: CircularProgressIndicator, popularity: Double) {

@@ -12,14 +12,28 @@ import my.farhan.favy.data.network.Status
 import my.farhan.favy.util.TAG
 import my.farhan.favy.util.toEpoch
 
+/***
+ * A repo to hold all API and DB transactions
+ */
 class MovieRepo(private val api: MovieEndpoint, private val dao: MovieDao) {
-    val apiEvent = MutableLiveData<ApiEvent>()
+    /***
+     * _ prefix to mark it is private, and mutable
+     * these data will only will mutable inside [MovieRepo] and will be set as LiveData when exposed to ViewModel
+     * such as [my.farhan.favy.ui.list.MovieListVM.apiEvent]
+     * and [my.farhan.favy.ui.detail.MovieDetailVM.selectedMovie]
+     */
+    private val _apiEvent = MutableLiveData<ApiEvent>()
     private val _movies = MutableLiveData<List<Movie>>()
     private val _selectedMovie = MutableLiveData<Movie>()
 
+    fun getApiEvent(): LiveData<ApiEvent> = _apiEvent
     fun getAllMovies(): LiveData<List<Movie>> = _movies
     fun getSelectedMovie(): LiveData<Movie> = _selectedMovie
 
+    /***
+     * take [sortMethod] params and postValue according to [sortMethod] given
+     * by default, will set to [SortMethod.ReleaseDate]
+     */
     suspend fun sortBy(sortMethod: SortMethod) {
         val temp = dao.findAll()
         when (sortMethod) {
@@ -38,9 +52,14 @@ class MovieRepo(private val api: MovieEndpoint, private val dao: MovieDao) {
         }
     }
 
+    /***
+     * call [MovieEndpoint.getNowPlayingMovie] and pass [page]
+     * if [page] == 1, it will [MovieDao.deleteAllMovie] first, to ensure copies is fresh
+     * if [page] > 1, it will keep appending
+     */
     suspend fun nowPlayingMoviesAPI(page: Int) {
         try {
-            apiEvent.postValue(ApiEvent(Status.LOADING, ""))
+            _apiEvent.postValue(ApiEvent(Status.LOADING, ""))
             val response = api.getNowPlayingMovie(
                 "328c283cd27bd1877d9080ccb1604c91",
                 page.toString()
@@ -69,17 +88,28 @@ class MovieRepo(private val api: MovieEndpoint, private val dao: MovieDao) {
                         )
                     )
                 }
-                apiEvent.postValue(ApiEvent(Status.SUCCESS, ""))
+                _apiEvent.postValue(ApiEvent(Status.SUCCESS, ""))
             }
         } catch (e: Exception) {
             Log.e(TAG, e.toString())
-            apiEvent.postValue(ApiEvent(Status.ERROR, e.toString()))
+            _apiEvent.postValue(ApiEvent(Status.ERROR, e.toString()))
         }
+    }
+
+    /***
+     * distinguish whether to call API or just fetch from DB if [Movie.hasCalledDetailApi]
+     */
+    suspend fun getMovieDetails(movieId: Int) {
+        val movie = getMovieDetailsDB(movieId)
+        if (movie.hasCalledDetailApi)
+            _selectedMovie.postValue(movie)
+        else
+            getMovieDetailsAPI(movieId)
     }
 
     private suspend fun getMovieDetailsAPI(movieId: Int) {
         try {
-            apiEvent.postValue(ApiEvent(Status.LOADING, ""))
+            _apiEvent.postValue(ApiEvent(Status.LOADING, ""))
             val response = api.getMovie(
                 movieId.toString(), "328c283cd27bd1877d9080ccb1604c91"
             )
@@ -89,23 +119,15 @@ class MovieRepo(private val api: MovieEndpoint, private val dao: MovieDao) {
                 movie.genre = response.body()!!.genres.map { it.name }
                 movie.runTime = response.body()!!.runtime
                 dao.add(movie)
-                apiEvent.postValue(ApiEvent(Status.SUCCESS, "detail"))
+                _apiEvent.postValue(ApiEvent(Status.SUCCESS, "detail"))
                 _selectedMovie.postValue(movie)
             }
         } catch (e: Exception) {
-            apiEvent.postValue(ApiEvent(Status.ERROR, e.toString()))
+            _apiEvent.postValue(ApiEvent(Status.ERROR, e.toString()))
         }
     }
 
     private suspend fun getMovieDetailsDB(movieId: Int): Movie {
         return dao.findMovie(movieId)
-    }
-
-    suspend fun getMovieDetails(movieId: Int) {
-        val movie = getMovieDetailsDB(movieId)
-        if (movie.hasCalledDetailApi)
-            _selectedMovie.postValue(movie)
-        else
-            getMovieDetailsAPI(movieId)
     }
 }

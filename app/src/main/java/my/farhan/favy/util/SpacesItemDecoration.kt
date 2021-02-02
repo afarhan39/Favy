@@ -5,7 +5,9 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 
-
+/***
+ * create uniform margin around item, based on [space]
+ */
 class SpacesItemDecoration(private val space: Int) : ItemDecoration() {
     override fun getItemOffsets(
         outRect: Rect,
